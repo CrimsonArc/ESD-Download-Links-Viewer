@@ -1,0 +1,261 @@
+﻿<Window x:Class="ESD_Download_Links_Viewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ESD_Download_Links_Viewer"
+        mc:Ignorable="d"
+        Title="ESD Download Links Viewer" Height="561" Width="802" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="Padding" Value="20,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Border x:Name="_border" CornerRadius="15" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Label x:Name="_container" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="{TemplateBinding Foreground}" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Label>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation To="DeepSkyBlue" Duration="0:0:0.50" Storyboard.TargetName="_border" Storyboard.TargetProperty="BorderBrush.Color" />
+                                            <ThicknessAnimation To="2" Duration="0:0:0.20" Storyboard.TargetName="_border" Storyboard.TargetProperty="BorderThickness" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Button.MouseLeave">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0.100" Storyboard.TargetName="_border" Storyboard.TargetProperty="BorderBrush.Color" />
+                                            <ThicknessAnimation Duration="0:0:0.200" Storyboard.TargetName="_border" Storyboard.TargetProperty="BorderThickness" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Background" Value="#FF7ED350" />
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ToolbarButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Height" Value="60"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="_border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <Label x:Name="_container" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="{TemplateBinding Foreground}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Label>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Button.MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation To="DeepSkyBlue" Duration="0:0:0.350" Storyboard.TargetName="_container" Storyboard.TargetProperty="BorderBrush.Color" />
+                                            <ThicknessAnimation To="0,0,0,5" Duration="0:0:0.100" Storyboard.TargetName="_container" Storyboard.TargetProperty="BorderThickness" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Button.MouseLeave">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0:0:0.100" Storyboard.TargetName="_container" Storyboard.TargetProperty="BorderBrush.Color" />
+                                            <ThicknessAnimation Duration="0:0:0.100" Storyboard.TargetName="_container" Storyboard.TargetProperty="BorderThickness" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" Value="DeepSkyBlue" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CopyButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="Content" Value="&#xE16F;"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="Height" Value="22"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+        </Style>
+
+        <Image x:Key="DatabaseIcon" Height="40">
+            <Image.Source>
+                <DrawingImage>
+                    <DrawingImage.Drawing>
+                        <GeometryDrawing Geometry="M22,18.055L22,20.513C22,22.438 17.345,24 12,24 6.656,24 2,22.438 2,20.513L2,18.055C4.418,19.793 9.005,20.311 12,20.311 15.006,20.311 19.588,19.788 22,18.055z M12,14.646C8.994,14.646,4.412,14.123,2,12.39L2,14.824C2,16.75 6.656,18.311 12,18.311 17.345,18.311 22,16.749 22,14.824L22,12.39C19.582,14.128,14.995,14.646,12,14.646z M12,0C6.656,0 2,1.562 2,3.488 2,5.414 6.656,6.975 12,6.975 17.345,6.975 22,5.413 22,3.488 22,1.562 17.345,-4.44089209850063E-16 12,-4.44089209850063E-16z M12,8.975C8.994,8.975,4.412,8.452,2,6.719L2,9.159C2,11.085 6.656,12.646 12,12.646 17.345,12.646 22,11.084 22,9.159L22,6.719C19.582,8.457,14.995,8.975,12,8.975z" Brush="#FFFFCC00">
+                        </GeometryDrawing>
+                    </DrawingImage.Drawing>
+                </DrawingImage>
+            </Image.Source>
+        </Image>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Margin="6" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center">Filter :</TextBlock>
+            <RadioButton x:Name="radioFilterAll" Grid.Column="1" GroupName="FilterGroup" Margin="3" Checked="radioFilterAll_Checked">All</RadioButton>
+            <RadioButton x:Name="radioFilterESD" Grid.Column="2" GroupName="FilterGroup" Margin="3" Checked="radioFilterESD_Checked">ESD</RadioButton>
+            <Button x:Name="btnOpenDB" Grid.Column="3" Style="{StaticResource ToolbarButtonStyle}" HorizontalAlignment="Right" Content="{StaticResource DatabaseIcon}" Click="btnOpenDB_Click"></Button>
+        </Grid>
+        <DataGrid x:Name="gridView" Grid.Row="1" CanUserReorderColumns="False" CanUserResizeRows="False" AutoGenerateColumns="False" SelectionMode="Single" IsReadOnly="True" RowHeight="25" SelectionChanged="gridView_SelectionChanged" RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Name}" Header="Name" Width="450">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Size" Width="120">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="Size" Mode="OneWay">
+                            <Binding.Converter>
+                                <local:SizeConverter/>
+                            </Binding.Converter>
+                        </Binding>
+                    </DataGridTextColumn.Binding>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Path=ModifiedDate, StringFormat={}{0:yyyy/MM/dd HH:mm:ss}}" Header="Modified Date" Width="150">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="3"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <GroupBox Grid.Row="2" Header="Details" Margin="3,6,3,3">
+            <Grid DataContext="{Binding ElementName=gridView, Path=SelectedItem}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">File Name :</TextBlock>
+                <TextBlock Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">Url :</TextBlock>
+                <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">Url Expire at :</TextBlock>
+                <TextBlock Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">Size :</TextBlock>
+                <TextBlock Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">Modified Date :</TextBlock>
+                <TextBlock Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">SHA-1 :</TextBlock>
+                <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="3">SHA-256 :</TextBlock>
+
+                <TextBox x:Name="txtFileName" Text="{Binding Path=Name, Mode=OneWay}" Grid.Column="1"></TextBox>
+                <TextBox x:Name="txtUrl" Text="{Binding Path=Url, Mode=OneWay}" Grid.Row="1" Grid.Column="1"></TextBox>
+                <TextBlock x:Name="txtUrlExpireDate" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="3"></TextBlock>
+                <TextBlock x:Name="txtSize" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="3">
+                    <TextBlock.Text>
+                        <Binding Path="Size" Mode="OneWay">
+                            <Binding.Converter>
+                                <local:SizeConverter/>
+                            </Binding.Converter>
+                        </Binding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBlock x:Name="txtDate" Text="{Binding Path=ModifiedDate, StringFormat={}{0:yyyy/MM/dd HH:mm:ss}, Mode=OneWay}" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="3"></TextBlock>
+                <TextBox x:Name="txtSHA1" Text="{Binding Path=SHA1, Mode=OneWay}" Grid.Row="5" Grid.Column="1"></TextBox>
+                <TextBox x:Name="txtSHA256" Text="{Binding Path=SHA256, Mode=OneWay}" Grid.Row="6" Grid.Column="1"></TextBox>
+
+                <Button x:Name="btnCopyFileName" Grid.Column="2" Style="{StaticResource CopyButtonStyle}" Click="btnCopyFileName_Click"></Button>
+                <Button x:Name="btnCopyUrl" Grid.Row="1" Grid.Column="2" Style="{StaticResource CopyButtonStyle}" Click="btnCopyUrl_Click"></Button>
+                <Button x:Name="btnCopySHA1" Grid.Row="5" Grid.Column="2" Style="{StaticResource CopyButtonStyle}" Click="btnCopySHA1_Click"></Button>
+                <Button x:Name="btnCopySHA256" Grid.Row="6" Grid.Column="2" Style="{StaticResource CopyButtonStyle}" Click="btnCopySHA256_Click"></Button>
+                <Button x:Name="btnCopyDetails" Grid.Row="7" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Center" Height="32" Margin="0,6" Click="btnCopyDetails_Click">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Margin="3" VerticalAlignment="Center" FontSize="16">&#xE16F;</TextBlock>
+                        <TextBlock Grid.Column="1" Margin="3" VerticalAlignment="Center">Copy Details to Clipboard</TextBlock>
+                    </Grid>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+        <Grid Grid.Row="3" Margin="0,3,0,0">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Margin="3">Created by: Crimson Arc</TextBlock>
+            <TextBlock HorizontalAlignment="Right" Margin="3,3,6,3">
+                <Hyperlink Name="GitHubLink" NavigateUri="https://github.com/crimsonarc" TargetName="_blank" RequestNavigate="GitHubLink_RequestNavigate">https://github.com/crimsonarc</Hyperlink>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</Window>
